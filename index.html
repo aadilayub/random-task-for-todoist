@@ -1,0 +1,43 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+  <!-- Add your site or application content here -->
+  <p id="message"></p>
+
+  <script>
+    function saveTodoistApiKey () {
+      const todoistApiKey = document.getElementById('todoistApiKey').value
+      if (todoistApiKey) {
+        window.localStorage.setItem("todoistApiKey", todoistApiKey)
+      }
+    }
+
+    if (!window.localStorage.getItem("todoistApiKey")) {
+      let innerHTML = "Must Provide Your Todoist API Key."
+        + "<br>"
+        + "ONLY SAVED TO LOCAL STORAGE."
+        + "<br>"
+        + "<input type=\"text\" id=\"todoistApiKey\" />"
+        + "<button onclick=\"saveTodoistApiKey()\">Save</button>"
+      document.getElementById("message").innerHTML = innerHTML
+    } else {
+      const todoistApiKey = window.localStorage.getItem("todoistApiKey")
+      fetch('https://api.todoist.com/rest/v1/tasks?label_id=2150910449',
+        { headers: new Headers({ 'Authorization': 'Bearer ' + todoistApiKey }) })
+        .then(response => response.json())
+        //.then(data => document.getElementById("message").innerHTML = JSON.stringify(data, null, 2))
+        .then(data => { item = data[Math.floor(Math.random() * data.length)]; window.location.replace(item.url) })
+    }
+  </script>
+</body>
+
+</html>
